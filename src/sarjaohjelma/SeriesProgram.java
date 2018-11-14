@@ -44,6 +44,7 @@ public class SeriesProgram {
     
     public void PrintSeriesProgram(){
         for(int i = 0; i < serieRounds.length; i++){
+            System.out.print("[Round:" + (i+1) + "]");
             for(int j = 0; j < serieRounds[i].length; j++){
                 System.out.print(serieRounds[i][j] + " ");
             }
