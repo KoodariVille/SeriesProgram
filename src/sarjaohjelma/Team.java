@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * @author Omistaja
  */
 public class Team {
-    private final int Id;
-    private final String Name;
+    private int Id;
+    private String Name;
 //    private Team team1;
 //    private Team team2;
     public ArrayList<Team> played = new ArrayList();
@@ -18,6 +18,7 @@ public class Team {
         Name = name;
     }
     
+    public Team(){};
 //    public Team(Team team1){
 //        this.team1 = team1;
 //        //this.team2 = team2;
