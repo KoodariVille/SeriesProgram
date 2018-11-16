@@ -27,26 +27,66 @@ public class SeriesProgram {
     }
     
     public void CreateRandomRounds(){
-        serieRounds = new Team[rounds][teamAmount / 2];
+        //luodaan satunnaisesti täytetty taulukko
+        //niin ettei joukkue mene ns. itseään vastaan
+        serieRounds = new Team[rounds][teamAmount];
         Random rand = new Random();
+        int n;
+        
+        n = rand.nextInt(6) + 0;
+        //tehdään tarkistus objekti looppia varten ja
+        //taulukon ensimmäiseen soluun pistetään se
+        Team t = teamList.get(n);
+        serieRounds[0][0] = t;
         
         for(int row = 0; row < rounds; row ++){
-            for(int column = 0; column < teamAmount / 2; column ++){
-                int n = rand.nextInt(5) + 0;
-                int m = rand.nextInt(5) + 0;
-                while(m == n){
-                    m = rand.nextInt(5) + 0;
+            for(int column = 0; column < teamAmount; column ++){              
+                n = rand.nextInt(6) + 0;
+                //katsotaan onko tarkistus olion nimi sama, kuin arvottu
+                if(t.GetName().equals(teamList.get(n).GetName())){
+                    //olion ollessa sama niin katsotaan onko arvottu numero 0, 
+                    //jos on niin lisätään yks, jos ei niin miinustetaan yks
+                    if(n == 0){
+                        n++;
+                        serieRounds[row][column] = teamList.get(n);
+                        //pistetään myös tarkistus olioon arvottu olio,
+                        //jotta seuraavalla kierroksella ei arvota samaa
+                        t = teamList.get(n);
+                    }else{
+                        n--;
+                        serieRounds[row][column] = teamList.get(n);
+                        t = teamList.get(n);
+                    }
+                }else{
+                    serieRounds[row][column] = teamList.get(n);
+                    t = teamList.get(n);
                 }
-                serieRounds[row][column] = new Team(teamList.get(n), teamList.get(m));
             }
-        }  
+        }
+    }
+    
+    public int CheckSeriesProgram(Team team){
+        int count = 0;
+        for(int row = 0; row < serieRounds.length; row++){
+            for(int col = 0; col < serieRounds[row].length; col++){
+                if(serieRounds[row][col].GetName().equals(team.GetName())){
+                    count++;
+                }
+            }
+        }
+        return count;
     }
     
     public void PrintSeriesProgram(){
         for(int i = 0; i < serieRounds.length; i++){
             System.out.print("[Round:" + (i+1) + "]");
             for(int j = 0; j < serieRounds[i].length; j++){
-                System.out.print(serieRounds[i][j] + " ");
+                if((j + 1) % 2 == 0){
+                    System.out.print(serieRounds[i][j] + "]");
+                }
+                else{
+                    System.out.print("[" + serieRounds[i][j] + " vs ");
+                }               
             }
             System.out.println();
         }

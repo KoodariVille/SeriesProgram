@@ -30,6 +30,10 @@ public class Main {
         
         c.CreateRandomRounds();
         c.PrintSeriesProgram();
+        
+        for(int i = 0; i < 6; i++){
+            System.out.println(c.CheckSeriesProgram(teamList.get(i)));
+        }
     }
     
 }
