@@ -40,12 +40,32 @@ public class Main {
         c.CreateRandomRounds();
         c.PrintSeriesProgram();
         
-        for(int i = 0; i < 6; i++){
-            while(c.CheckSeriesProgram(teamList.get(i)) < 10){
-                c.FixSeriesProgram();
-            }
+        for(int j = 0; j < teamList.size(); j++){
+            System.out.println(c.GetTeamCount(teamList.get(j)));   
         }
         
+        System.out.println(c.GetBiggestTeam().GetName());
+        System.out.println(c.GetSmallestTeam().GetName());
+        
+        for(int i = 0; i < teamList.size(); i++){
+//            int turn = 0;
+            while(c.GetTeamCount(teamList.get(i)) < (2 * (teamList.size() - 1))){
+                c.FixSeriesProgram();
+//                turn ++;
+//                if(turn == 100){
+//                    break;
+//                }
+            }
+        }
+//        c.FixSeriesProgram();
+        System.out.println();
         c.PrintSeriesProgram();
+        
+        System.out.println(c.GetBiggestTeam().GetName());
+        System.out.println(c.GetSmallestTeam().GetName());
+        
+        for(int j = 0; j < teamList.size(); j++){
+            System.out.println(c.GetTeamCount(teamList.get(j)));
+        }
     }  
 }

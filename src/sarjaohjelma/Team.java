@@ -11,7 +11,7 @@ public class Team {
     private String Name;
 //    private Team team1;
 //    private Team team2;
-    public ArrayList<Team> played = new ArrayList();
+//    public ArrayList<Team> played = new ArrayList();
         
     public Team(int id, String name){
         Id = id;
