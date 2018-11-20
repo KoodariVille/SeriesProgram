@@ -11,7 +11,8 @@ public class Team {
     private String Name;
 //    private Team team1;
 //    private Team team2;
-//    public ArrayList<Team> played = new ArrayList();
+    public ArrayList<Team> playedH = new ArrayList();
+    public ArrayList<Team> playedV = new ArrayList();
         
     public Team(int id, String name){
         Id = id;
@@ -30,6 +31,26 @@ public class Team {
     
     public String GetName(){
         return Name;
+    }
+    
+    public int GetPlayedNumH(Team t){
+        int num = 0;
+        for(Team x : playedH){
+            if(x.GetName().equals(t.GetName())){
+                num ++;
+            }
+        }
+        return num;
+    }
+    
+    public int GetPlayedNumV(Team t){
+        int num = 0;
+        for(Team x : playedV){
+            if(x.GetName().equals(t.GetName())){
+                num ++;
+            }
+        }
+        return num;
     }
     
     @Override

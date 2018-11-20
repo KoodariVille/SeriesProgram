@@ -1,7 +1,7 @@
 package sarjaohjelma;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -24,46 +24,55 @@ public class SeriesProgram {
         }else{
             teamAmount = teamList.size() + 1;
             rounds = (teamAmount - 1) * versusGames;
+            teamList.add(new Team(0, "Ei ketään"));
         }
     }
     
     public void CreateRandomRounds(){
-        //luodaan satunnaisesti täytetty taulukko
-        //niin ettei joukkue mene ns. itseään vastaan
         serieRounds = new Team[rounds][teamAmount];
+             
+        for(int row = 0; row < serieRounds.length; row++){
+            CreateRandomRound(row);          
+        }
+            
+    }
+    
+    public void CreateRandomRound(int row){
+        ArrayList<Team> tList = new ArrayList();
+        
+        teamList.forEach((x) -> {
+            tList.add(x);
+        });
+        
+        int turn = 0;
+        
         Random rand = new Random();
         int n;
+        int col = 0;
         
-        n = rand.nextInt(teamList.size()) + 0;
-        //tehdään tarkistus objekti looppia varten ja
-        //taulukon ensimmäiseen soluun pistetään se
-        Team t = teamList.get(n);
-        serieRounds[0][0] = t;
-        
-        for(int row = 0; row < rounds; row ++){
-            for(int column = 0; column < teamAmount; column ++){              
+        while(!tList.isEmpty()){           
+            for(Iterator<Team> iterator = tList.iterator(); iterator.hasNext();){
+                Team value = iterator.next();
                 n = rand.nextInt(teamList.size()) + 0;
-                //katsotaan onko tarkistus olion nimi sama, kuin arvottu
-                if(t.GetName().equals(teamList.get(n).GetName())){
-                    //olion ollessa sama niin katsotaan onko arvottu numero 0, 
-                    //jos on niin lisätään yks, jos ei niin miinustetaan yks
-                    if(n == 0){
-                        n++;
-                        serieRounds[row][column] = teamList.get(n);
-                        //pistetään myös tarkistus olioon arvottu olio,
-                        //jotta seuraavalla kierroksella ei arvota samaa
-                        t = teamList.get(n);
+                if(value.GetName().equals(teamList.get(n).GetName())){
+                    serieRounds[row][col] = teamList.get(n);                 
+                    iterator.remove();
+                    if((col + 1) % 2 == 0){
+                        //joukkueen listaan merkataan ketä vastaan pelattiin vieraissa
+                        serieRounds[row][col].playedV.add(serieRounds[row][col-1]);
                     }else{
-                        n--;
-                        serieRounds[row][column] = teamList.get(n);
-                        t = teamList.get(n);
-                    }
-                }else{
-                    serieRounds[row][column] = teamList.get(n);
-                    t = teamList.get(n);
+                        for(int i = 0; i < col; i++){
+                            if(serieRounds[row][i].GetName().equals(serieRounds[row][col].GetName())){
+                                //joukkueen listaan merkataan ketä vastaan pelattiin kotona
+                                serieRounds[row][col].playedH.add(serieRounds[row][col+1]);  
+                            }
+                        }                       
+                    }    
+                    col++;
                 }
             }
-        }
+
+        }       
     }
     
     public int GetTeamCount(Team team){
@@ -81,15 +90,22 @@ public class SeriesProgram {
     public Team GetBiggestTeam(){
         int j,k;
         Team t = teamList.get(0);
-        k = GetTeamCount(teamList.get(0));
+        k = 0;
         
-        for(int i = 0; i < teamList.size(); i++){
-            j = GetTeamCount(teamList.get(i));
+        for(Team x : teamList){          
+            j = GetTeamCount(x);
             if(j > k){
                k = j;
-               t = teamList.get(i); 
+               t = x; 
             }
         }
+//        for(int i = 0; i < teamList.size(); i++){
+//            j = GetTeamCount(teamList.get(i));
+//            if(j > k){
+//               k = j;
+//               t = teamList.get(i); 
+//            }
+//        }
         return t;
     }
     
@@ -110,7 +126,7 @@ public class SeriesProgram {
     
     public Team GetSmallestTeam(Team team){
         int j;
-        Team t = new Team();
+        Team t = teamList.get(0);
         
         for(int i = 0; i < teamList.size(); i++){          
             j = GetTeamCount(teamList.get(i));
@@ -122,34 +138,16 @@ public class SeriesProgram {
         return t;
     }
     
-    public void FixSeriesProgram(){
-        //pistetään apu olioon eniten esiintyä joukkue
-        Team t = GetBiggestTeam();      
+    public int GetRoundTeamCount(Team team, int row){
+        int num = 0;
         
-        //käydään taulukkoa läpi,
-        for(int row = 0; row < serieRounds.length; row++){
-            for(int col = 0; col < serieRounds[row].length; col++){
-                //jos sarakkeen joukkuuen nimi on sama, kuin joukkueella, jolla eniten pelejä
-                if(serieRounds[row][col].GetName().equals(t.GetName())){
-                    //pistetään t apu olioon vähiten esiintyvä joukkue
-                    t = GetSmallestTeam();
-                    //jos sarake + 1 on 2 jaollinen(vierasjoukkueen sarake) ja sarake ei ole rivin viimeinen niin
-                    if(col + 1 % 2 == 0&& col != teamList.size()){
-                        //tarkistetaan onko edellinen eli kotijoukkue sama kuin t
-                        //ettei tule t vastaan t, jos näin on niin haetaan uusi joukkue
-                        if(serieRounds[row][col-1].GetName().equals(t.GetName())){
-                            //antamalla metodille parametriksi joukkue, jota emme halua
-                            //näin se hakee joukkueen, jolla liian vähän pelejä ja ei ole samaa nimeä
-                            serieRounds[row][col] = GetSmallestTeam(t);
-                        }else{
-                            serieRounds[row][col] = t;
-                        }
-                    }else{
-                        serieRounds[row][col] = t;
-                    }
-                }
-            }
+        for(int col = 0; col < serieRounds[row].length; col++){
+            if(team.GetName().equals(serieRounds[row][col].GetName())){
+                num++;
+            }               
         }
+        
+        return num;
     }
     
     public void PrintSeriesProgram(){
