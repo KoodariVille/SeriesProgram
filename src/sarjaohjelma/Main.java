@@ -6,6 +6,7 @@
 package sarjaohjelma;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -37,44 +38,9 @@ public class Main {
         
         SeriesProgram c = new SeriesProgram(2, teamList);
         
+        c.CreateListOfGames();
         c.CreateRandomRounds();
         c.PrintSeriesProgram();
-//        c.SetPlayedGames();
         
-        for(int k = 0; k < teamList.get(0).playedH.size(); k++){
-            System.out.println(teamList.get(0).playedH.get(k));
-        }
-        
-//        for(int k = 0; k < teamList.get(0).playedV.size(); k++){
-//            System.out.println(teamList.get(0).playedV.get(k));
-//        }
-        
-//        for(int j = 0; j < teamList.size(); j++){
-//            System.out.println(c.GetTeamCount(teamList.get(j)));   
-//        }
-        
-//        System.out.println(c.GetBiggestTeam().GetName());
-//        System.out.println(c.GetSmallestTeam().GetName());
-        
-//        for(int i = 0; i < teamList.size(); i++){
-//            int turn = 0;
-//            while(c.GetTeamCount(teamList.get(i)) < (2 * (teamList.size() - 1))){
-//                c.FixSeriesProgram();
-//                turn ++;
-//                if(turn == 100){
-//                    break;
-//                }
-//            }
-//        }
-//        c.FixSeriesProgram();
-//        System.out.println();
-//        c.PrintSeriesProgram();
-        
-//        System.out.println(c.GetBiggestTeam().GetName());
-//        System.out.println(c.GetSmallestTeam().GetName());
-        
-//        for(int j = 0; j < teamList.size(); j++){
-//            System.out.println(c.GetTeamCount(teamList.get(j)));
-//        }
     }  
 }
