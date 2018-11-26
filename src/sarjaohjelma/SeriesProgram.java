@@ -60,55 +60,67 @@ public class SeriesProgram {
         int n;
         
         while(!games.isEmpty()){
-            for(int row = 0; row < serie.length; row++){
-                for(int col = 0; col < serie[col].length; col++){
+            for (Game[] x : serie) {
+                for (int col = 0; col < serie[col].length; col++) {
                     n = rand.nextInt(games.size()) + 0;
-                    serie[row][col] = games.get(n);
+                    x[col] = games.get(n);
                     games.remove(n);
                 }
             }
         }  
     }
     
-    public void FixRounds(){
-        Game g;
-        int check;
-        
-        for(int row = 0; row < serie.length; row++){
-            for(Team x : teamList){
-                check = CheckRound(row, x);
-                if(check > 1){
-                    FindRoundWTeam(row, x);
-                }
-            }
-        }
-    }
-    
-    public int CheckRound(int row, Team t){
-        int count = 0;
-        for(int col = 0; col < serie[row].length; col++){
-            if(t.GetName().equals(serie[row][col].GetHome().GetName()) || t.GetName().equals(serie[row][col].GetVisitor().GetName())){
-                count++;
-            }
-        }
-        return count;
-    }
-    
-    public void FindRoundWTeam(int row, Team t){
-        int count = 0;
-        ArrayList<Game> g;
-        if(row != games.size()){
-            row++;
-            for(int col = 0; col < serie[row].length; col++){
-                if(t.GetName().equals(serie[row][col].GetHome().GetName()) || t.GetName().equals(serie[row][col].GetVisitor().GetName())){
-                    count++;
-                }
-            }
-            if(count == 0){
-                g = FindMissingTeam();
-            }
-        }      
-    }
+//    public void FixRounds(){
+//        Game game, g;
+//        int check;
+//        
+//        for(int row = 0; row < serie.length; row++){
+//            for(Team x : teamList){
+//                g = CheckRound(row, x);
+//                if(g.GetHome().equals(x.GetName()) || g.GetVisitor().equals(x.GetName())){
+//                    check = FindRoundWTeam(x);
+//                    game = serie[check][0];
+//                    serie[check][0] = g;
+//                }
+//            }
+//        }
+//    }
+//    
+//    public Game CheckRound(int row, Team t){
+//        int count = 0;
+//        int c = 0;
+//        Game g = new Game();
+//        
+//        for(int col = 0; col < serie[row].length; col++){
+//            if(t.GetName().equals(serie[row][col].GetHome()) || t.GetName().equals(serie[row][col].GetVisitor())){
+//                c = col;
+//                count++;
+//            }
+//        }
+//        if(count > 1){
+//            g = serie[row][c];
+//        }
+//        return g;
+//    }
+//    
+//    public int FindRoundWTeam(Team t){
+//        int count = 0;
+//        int r = 0;
+//        
+//        for(int row = 0; row < serie.length; row++){
+//            for(int col = 0; col < serie[row].length; col++){
+//                if(t.GetName().equals(serie[row][col].GetHome()) || t.GetName().equals(serie[row][col].GetVisitor())){
+//                    count++;
+//                }
+//            }
+//            if(count == 0){
+//                r = row;
+//                break;
+//            }
+//        }
+//        
+//        return r;
+//    }
     
 //    public void CreateRandomRound(int row){
 //        ArrayList<Team> tList = new ArrayList();

@@ -20,6 +20,8 @@ public class Game {
         visitor = v;
     }
     
+    public Game(){}
+    
 //    public int GetId(){
 //        return ID;
 //    }
@@ -32,12 +34,12 @@ public class Game {
         visitor = t;
     }
     
-    public Team GetHome(){
-        return home;
+    public String GetHome(){
+        return home.GetName();
     }
     
-    public Team GetVisitor(){
-        return visitor;
+    public String GetVisitor(){
+        return visitor.GetName();
     }
     
     @Override
