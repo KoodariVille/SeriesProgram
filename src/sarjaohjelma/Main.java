@@ -37,10 +37,12 @@ public class Main {
 //        teamList.add(new Team(15, "Sport"));
         
         SeriesProgram c = new SeriesProgram(2, teamList);
-        
-        c.CreateListOfGames();
-        c.CreateRandomRounds();
-        c.PrintSeriesProgram();
-        
+        c.Run();
+//        c.CreateListOfGames();
+//        c.CreateRandomRounds();
+//        c.PrintSeriesProgram();
+//        c.FixRounds();
+//        System.out.println();
+//        c.PrintSeriesProgram();       
     }  
 }
