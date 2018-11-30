@@ -34,6 +34,14 @@ public class Game {
         visitor = t;
     }
     
+    public Team GetHTeam(){
+        return home;
+    }
+    
+    public Team GetVTeam(){
+        return visitor;
+    }
+    
     public String GetHome(){
         return home.GetName();
     }

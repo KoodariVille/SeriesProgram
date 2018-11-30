@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Omistaja
+ * @author Ville Niemi
  */
 public class Team {
     private int Id;

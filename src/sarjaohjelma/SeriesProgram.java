@@ -1,14 +1,11 @@
 package sarjaohjelma;
 
 import java.util.ArrayList;
-//import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
-//import java.util.Set;
 
 /**
  *
- * @author Omistaja
+ * @author Ville Niemi
  */
 public class SeriesProgram {
     private final int rounds;
@@ -16,7 +13,6 @@ public class SeriesProgram {
     private final int versusGames;
     private final ArrayList<Team> teamList;
     private ArrayList<Game> games;
-//    private Team[][] serieRounds;
     private Game[][] serie;
     
     public SeriesProgram(int m, ArrayList<Team> teamList){
@@ -26,7 +22,7 @@ public class SeriesProgram {
             teamAmount = teamList.size();
             rounds = (teamAmount - 1) * versusGames;           
         }else{
-//            teamList.add(new Team(0, "Ei ketään"));
+            teamList.add(new Team(0, "Ei ketään"));
             teamAmount = teamList.size();
             rounds = (teamAmount - 1) * versusGames;           
         }
@@ -67,7 +63,7 @@ public class SeriesProgram {
     
     public void Run(){
         boolean check = false;
-        int num = 0;
+        int num;
         int turn = 0;
         
         CreateListOfGames();
@@ -76,15 +72,21 @@ public class SeriesProgram {
         System.out.println();
         
         while(check == false){
-            FixRounds();
+            num = 0;
+//            FixRounds();
             for(int i = 0; i < serie.length; i++){
-                num += RoundCheck(i);            
+                num += RoundCheck(i);
+                if(num != 0){
+//                    System.out.println("Round to be fixed: " + (i + 1));
+                    FixRound(i);
+                }
+//                FixRound(i);
             }
             check = num == 0;
             turn++;
-            if(turn > 50){
-                break;
-            }
+//            if(turn > 50){
+//                break;
+//            }
         }
         PrintSeriesProgram();
     }
@@ -108,118 +110,7 @@ public class SeriesProgram {
         return num;
     }
     
-    public void FixRounds(){
-        Game game;
-        int c, r, c1;
-//        int count = 0;
-        
-        for(int row = 0; row < serie.length; row++){
-            for(Team x : teamList){
-                c = CalcTeam(row, x);
-                if(c > 1){
-                    System.out.println(x.GetName() + "  " + row);
-                    c = GetCol(row, x);
-                    game = serie[row][c];                  
-                    r = GetRoundWTeam(x);
-                    if(r < (rounds + 1)){
-//                        c1 = ColFinder(r, game);
-                        
-                        serie[row][c] = serie[r][c];
-                        serie[r][c] = game;
-//                        for(Team t : teamList){
-//                            c1 = CalcTeam(r, t);
-//                            if(c1 > 1){
-//                                c1 = GetCol(r, t);
-//                                serie[row][c] = serie[r][c1];
-//                                serie[r][c1] = game;
-//                            }
-//                        }
-                        
-                    }
-//                    serie[row][c] = serie[r][c];
-//                    serie[r][c] = game;
-                }
-            }
-        }
-    }
-    
-    public int CalcTeam(int row, Team t){
-        int count = 0;
-        for (Game item : serie[row]) {
-            if (t.GetName().equals(item.GetHome()) || t.GetName().equals(item.GetVisitor())) {              
-                count++;
-            }
-        }
-        return count;
-    }   
-    
-    public int GetCol(int row, Team t){
-        int c = 0;
-        for(int col = 0; col < serie[row].length; col++){
-            if(t.GetName().equals(serie[row][col].GetHome()) || t.GetName().equals(serie[row][col].GetVisitor())){               
-                c = col;
-                break;
-            }
-        }
-//        System.out.println("column: " + c);
-        return c;
-    }
-    
-//    public int ColFinder(int row, Game game){
-//        int c = (teamAmount/2+1);
-//        for(int col = 0; col < serie[row].length; col++){
-//            if(!game.GetHome().equals(serie[row][col].GetHome()) && !game.GetVisitor().equals(serie[row][col].GetVisitor()) && !game.GetVisitor().equals(serie[row][col].GetHome()) && !game.GetHome().equals(serie[row][col].GetVisitor())){
-//                c = col;
-////                break;
-//            }
-//        }
-//        return c;
-//    }
-    
-    public int GetRoundWTeam(Team t){
-        int count;
-        int r = (rounds + 1);
-        
-        for(int row = 0; row < serie.length; row++){
-            count = CheckRound(row, t);
-            if(count == serie[row].length){
-                r = row;
-                break;
-            }
-//            for (Game item : serie[row]) {
-//                if (!t.GetName().equals(item.GetHome()) && !t.GetName().equals(item.GetVisitor())) {              
-//                    count++;
-//                }
-//                if(count > 0){
-//                    r = row;
-//                    break;
-//                }
-//            }
-//            if(count > 0){
-//                r = row;
-//                break;
-//            }
-        }
-//        System.out.println("round: " + r);
-        return r;
-    }
-    
-    public int CheckRound(int row, Team t){
-        int count = 0;
-        
-        for (Game item : serie[row]) {
-            if (!t.GetName().equals(item.GetHome()) && !t.GetName().equals(item.GetVisitor())) {              
-                count++;
-            }
-//                if(count > 0){
-//                    r = row;
-//                    break;
-//                }
-        }      
-        return count;
-    }
-    
-    public void PrintSeriesProgram(){
+    private void PrintSeriesProgram(){
         for(int i = 0; i < serie.length; i++){
             System.out.print("[Round:" + (i+1) + "]");
             for (Game item : serie[i]) {
@@ -227,6 +118,89 @@ public class SeriesProgram {
             }
             System.out.println();
         }
+    }
+    
+    private void FixRound(int row){
+        int count = 0;
+        int column;
+        int roundWTeam;
+        
+        for(Team x : teamList){
+            for(int col = 0; col < serie[row].length; col++){
+                if(serie[row][col].GetHome().equals(x.GetName())||serie[row][col].GetVisitor().equals(x.GetName())){
+                    count++;
+                }
+            }
+            if(count > 1){
+                column = GetCol(x, row);
+                roundWTeam = GetRoundWTeam(x);
+//                System.out.println(serie[row][column].toString() + " menee riville: " + (roundWTeam+1));
+                ChangeGame(serie[row][column], roundWTeam);             
+            }
+            count = 0;
+        }
+    }
+    
+    private int GetCol(Team t, int row){
+        ArrayList<Integer> list = new ArrayList();
+        Random rand = new Random();
+        int n;
+
+        for(int col = 0; col < serie[row].length; col++){
+            if(serie[row][col].GetHome().equals(t.GetName())||serie[row][col].GetVisitor().equals(t.GetName())){
+                list.add(col);
+            }
+        }
+        n = list.get(rand.nextInt(list.size()) + 0);
+        
+        return n;
+    }
+    
+    private int GetRoundWTeam(Team t){
+        ArrayList<Integer> list = new ArrayList();
+        Random rand = new Random();
+        int count = 0;
+        int n;
+        
+        for(int row = 0; row < serie.length; row++){
+            for(int col = 0; col < serie[row].length; col++){
+                if(!serie[row][col].GetHome().equals(t.GetName())&&!serie[row][col].GetVisitor().equals(t.GetName())){
+                    count++;
+                }
+            }if(count == serie[row].length){
+                list.add(row);
+            }
+            count = 0;
+        }
+        
+        n = list.get(rand.nextInt(list.size()) + 0);
+        return n;
+    }
+    
+    private void ChangeGame(Game source, int r2){
+        int r1 = Integer.MAX_VALUE;
+        int c1 = Integer.MAX_VALUE;
+        int c2 = Integer.MAX_VALUE;
+        Random rand = new Random();
+        Game sourceGame = new Game();
+        Game target;
+        int n;
+        
+        for(int row = 0; row < serie.length; row++){
+            for(int col = 0; col < serie[row].length; col++){
+                if(serie[row][col].equals(source)){
+                    r1 = row;
+                    c1 = col;
+                    sourceGame = source;
+                }
+            }
+        }
+        n = rand.nextInt(serie[r2].length);
+        target = serie[r2][n];
+        serie[r1][c1] = target;
+        serie[r2][n] = sourceGame;
+        
+//        System.out.println(serie[r1][c1].toString() + " " + serie[r2][c2]);
     }
     
 }

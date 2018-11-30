@@ -1,22 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sarjaohjelma;
 
 import java.util.ArrayList;
-import java.util.Random;
-
 /**
  *
- * @author Omistaja
+ * @author Ville Niemi
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         ArrayList<Team> teamList = new ArrayList();
         
@@ -36,13 +26,10 @@ public class Main {
 //        teamList.add(new Team(14, "Saipa"));
 //        teamList.add(new Team(15, "Sport"));
         
+        //sarjaohjelma luodaan antamalla joukkulista 
+        //ja kuinka monta kertaa joukkueet pelaavat toisiaan vastaan
         SeriesProgram c = new SeriesProgram(2, teamList);
-        c.Run();
-//        c.CreateListOfGames();
-//        c.CreateRandomRounds();
-//        c.PrintSeriesProgram();
-//        c.FixRounds();
-//        System.out.println();
-//        c.PrintSeriesProgram();       
+        
+        c.Run();      
     }  
 }
