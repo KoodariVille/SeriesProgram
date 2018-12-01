@@ -1,5 +1,4 @@
 package sarjaohjelma;
-
 import java.util.ArrayList;
 /**
  *
@@ -26,7 +25,7 @@ public class Main {
 //        teamList.add(new Team(14, "Saipa"));
 //        teamList.add(new Team(15, "Sport"));
         
-        //sarjaohjelma luodaan antamalla joukkulista 
+        //sarjaohjelma luodaan antamalla joukkuelista 
         //ja kuinka monta kertaa joukkueet pelaavat toisiaan vastaan
         SeriesProgram c = new SeriesProgram(2, teamList);
         

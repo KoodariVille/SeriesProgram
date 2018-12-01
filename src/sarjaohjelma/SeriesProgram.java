@@ -1,5 +1,4 @@
 package sarjaohjelma;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -44,8 +43,8 @@ public class SeriesProgram {
         });
     }
     
+    //luodaan pelilistasta random kierroksia kunnes lista on tyhjä
     public void CreateRandomRounds(){
-//        serieRounds = new Team[rounds][teamAmount];
         serie = new Game[rounds][(teamAmount/2)];
         Random rand = new Random(games.size());
         int n;
@@ -73,14 +72,13 @@ public class SeriesProgram {
         
         while(check == false){
             num = 0;
-//            FixRounds();
+            
+            //pyöritetään looppia kunnes joka kierros palauttaa nollan
             for(int i = 0; i < serie.length; i++){
                 num += RoundCheck(i);
                 if(num != 0){
-//                    System.out.println("Round to be fixed: " + (i + 1));
                     FixRound(i);
                 }
-//                FixRound(i);
             }
             check = num == 0;
             turn++;
@@ -94,10 +92,14 @@ public class SeriesProgram {
     public int RoundCheck(int row){
         ArrayList<Team> tList = new ArrayList();
         int num;
+        
+        //tehdään uusi lista joukkeista
         teamList.forEach((x) -> {
             tList.add(x);
         });
         
+        //käydään joukkuelistaa läpi ja katsotaan onko kierroksella joukkuetta
+        //sen ollessa poistetaan listalta
         teamList.forEach((Team t) -> {
             for (Game item : serie[row]) {
                 if (item.GetHome().equals(t.GetName()) || item.GetVisitor().equals(t.GetName())) {
@@ -105,11 +107,13 @@ public class SeriesProgram {
                 }
             }
         });
-//        System.out.println(tList.size());
+        
+        //palautetaan koko, jos se ei ole nolla kierroksessa ei ole kaikkia joukkeita 
         num = tList.size();
         return num;
     }
     
+    //tulostaa sarjaohjelman
     private void PrintSeriesProgram(){
         for(int i = 0; i < serie.length; i++){
             System.out.print("[Round:" + (i+1) + "]");
@@ -125,6 +129,8 @@ public class SeriesProgram {
         int column;
         int roundWTeam;
         
+        //katsotaan löytyy kierrokselta joukkuetta ja jos se löytyy enemmän kuin kerran
+        //haetaan sen jokin sen esiintyminen kolumni 
         for(Team x : teamList){
             for(int col = 0; col < serie[row].length; col++){
                 if(serie[row][col].GetHome().equals(x.GetName())||serie[row][col].GetVisitor().equals(x.GetName())){
@@ -133,14 +139,17 @@ public class SeriesProgram {
             }
             if(count > 1){
                 column = GetCol(x, row);
+                //etsitään kierros missä tarkastelun joukkuetta ei ole
                 roundWTeam = GetRoundWTeam(x);
-//                System.out.println(serie[row][column].toString() + " menee riville: " + (roundWTeam+1));
+                //tämän saatua vaihdetaan pelien paikkaa
                 ChangeGame(serie[row][column], roundWTeam);             
             }
             count = 0;
         }
     }
     
+    //haetaan riviltä kolumnit missä annettu joukue esiintyy 
+    //arvotaan niiden väliltä mistä kohdasta joukkue vaihdetaan
     private int GetCol(Team t, int row){
         ArrayList<Integer> list = new ArrayList();
         Random rand = new Random();
@@ -156,6 +165,8 @@ public class SeriesProgram {
         return n;
     }
     
+    //etsitään kierrokset ilman parametrin tiimiä
+    //tehdään kierros niistä ja arvotaan palautettava rivi niistä
     private int GetRoundWTeam(Team t){
         ArrayList<Integer> list = new ArrayList();
         Random rand = new Random();
@@ -164,9 +175,11 @@ public class SeriesProgram {
         
         for(int row = 0; row < serie.length; row++){
             for(int col = 0; col < serie[row].length; col++){
+                //tarkistetaan onko solussa joukuetta, jos ei ole counteri nousee
                 if(!serie[row][col].GetHome().equals(t.GetName())&&!serie[row][col].GetVisitor().equals(t.GetName())){
                     count++;
                 }
+            //sen ollessa saman verran kuin kierroksen pituus lisätään kierros listaan    
             }if(count == serie[row].length){
                 list.add(row);
             }
@@ -177,6 +190,7 @@ public class SeriesProgram {
         return n;
     }
     
+    //pelin vaihto metodi
     private void ChangeGame(Game source, int r2){
         int r1 = Integer.MAX_VALUE;
         int c1 = Integer.MAX_VALUE;
@@ -195,12 +209,12 @@ public class SeriesProgram {
                 }
             }
         }
+        //arvotaan kohde kierroksen kolumni
         n = rand.nextInt(serie[r2].length);
         target = serie[r2][n];
+        //pistetään vaihdettavaan peliin kohde
         serie[r1][c1] = target;
-        serie[r2][n] = sourceGame;
-        
-//        System.out.println(serie[r1][c1].toString() + " " + serie[r2][c2]);
-    }
-    
+        //ja kohteeseen vaihdettava peli
+        serie[r2][n] = sourceGame;      
+    }  
 }
