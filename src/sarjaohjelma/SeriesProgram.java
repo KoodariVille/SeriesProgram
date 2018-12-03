@@ -32,15 +32,57 @@ public class SeriesProgram {
     //näin saadaan koti ja vieras peli jokaiselle
     public void CreateListOfGames(){
         games = new ArrayList();
+        ArrayList<Team> tList = new ArrayList();
         
-        //käydään joukkuelistaa läpi kahdessa loopissa
-        //games listaan lisätään uusi Game olio, jos x joukkue ja t joukkue
-        //niiden ollessa eri nimisiä näin vältetään päällekkäisyydet ei tule esim. tappara vastaan tappara
-        teamList.forEach((x) -> {
-            teamList.stream().filter((t) -> (!x.GetName().equals(t.GetName()))).forEachOrdered((t) -> {
-                games.add(new Game(x,t));
+        if(versusGames == 1){
+            teamList.forEach((x) -> {
+                tList.add(x);
             });
-        });
+            while(tList.size() > 1){
+                for(Team x : teamList){
+                    for(int i = 0; i < tList.size(); i++){
+                        if(!x.equals(tList.get(i))){
+                            games.add(new Game(x,tList.get(i)));
+                        }
+                    }
+                    tList.remove(x);
+                }
+            }
+        }
+        else if((versusGames % 2) == 0){
+            for(int i = 0; i < (versusGames/2); i++){
+                //käydään joukkuelistaa läpi kahdessa loopissa
+                //games listaan lisätään uusi Game olio, jos x joukkue ja t joukkue
+                //niiden ollessa eri nimisiä näin vältetään päällekkäisyydet ei tule esim. tappara vastaan tappara
+                teamList.forEach((x) -> {
+                    teamList.stream().filter((t) -> (!x.GetName().equals(t.GetName()))).forEachOrdered((t) -> {
+                        games.add(new Game(x,t));
+                    });
+                });
+            }
+        }else{
+            for(int i = 0; i < ((versusGames-1)/2); i++){
+                teamList.forEach((x) -> {
+                    teamList.stream().filter((t) -> (!x.GetName().equals(t.GetName()))).forEachOrdered((t) -> {
+                        games.add(new Game(x,t));
+                    });
+                });
+            }
+            teamList.forEach((x) -> {
+                tList.add(x);
+            });
+            while(tList.size() > 1){
+                for(Team x : teamList){
+                    for(int i = 0; i < tList.size(); i++){
+                        if(!x.equals(tList.get(i))){
+                            games.add(new Game(x,tList.get(i)));
+                        }
+                    }
+                    tList.remove(x);
+                }
+            }
+        }
+        
     }
     
     //luodaan pelilistasta random kierroksia kunnes lista on tyhjä
